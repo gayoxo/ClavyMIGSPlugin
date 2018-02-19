@@ -466,7 +466,7 @@ Categorias=new ArrayList<String>();
 								}
 								
 								CompleteTextElementType EventoD2=new CompleteTextElementType(NameConstantsMIGS.EVENTO,ContribucionD2,grammarVO);
-								EventoD2.getSons().add(EventoD2);
+								ContribucionD2.getSons().add(EventoD2);
 								
 								EventoD2.setClassOfIterator(EventoD);
 								
@@ -483,7 +483,7 @@ Categorias=new ArrayList<String>();
 								}
 								
 								CompleteTextElementType FechaD2=new CompleteTextElementType(NameConstantsMIGS.FECHA,ContribucionD2,grammarVO);
-								FechaD2.getSons().add(FechaD2);
+								ContribucionD2.getSons().add(FechaD2);
 								 FechaD2.setClassOfIterator( FechaD);
 								
 								{
