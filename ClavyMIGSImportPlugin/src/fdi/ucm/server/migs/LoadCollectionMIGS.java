@@ -391,6 +391,41 @@ Categorias=new ArrayList<String>();
 		ContribucionD.getShows().add(Valor3);
 		}
 		
+		List<CompleteTextElementType> Evento=new ArrayList<CompleteTextElementType>();
+		
+		CompleteTextElementType EventoD=new CompleteTextElementType(NameConstantsMIGS.EVENTO,ContribucionD,grammarVO);
+		ContribucionD.getSons().add(EventoD);
+		Evento.add(EventoD);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		EventoD.getShows().add(VisibleAtt);
+		EventoD.getShows().add(Valor2);
+		EventoD.getShows().add(Valor3);
+		}
+		
+		List<CompleteTextElementType> Fecha=new ArrayList<CompleteTextElementType>();
+		
+		CompleteTextElementType FechaD=new CompleteTextElementType(NameConstantsMIGS.FECHA,ContribucionD,grammarVO);
+		ContribucionD.getSons().add(FechaD);
+		Fecha.add(EventoD);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		FechaD.getShows().add(VisibleAtt);
+		FechaD.getShows().add(Valor2);
+		FechaD.getShows().add(Valor3);
+		}
+		
+		
 		HashMap<Integer,HashMap<Integer, CompleteTextElementType>> tablaDat=new HashMap<Integer,HashMap<Integer, CompleteTextElementType>>();
 		HashMap<Integer,List<CompleteTextElementType>> tablaDatList=new HashMap<Integer,List<CompleteTextElementType>>();
 		
@@ -433,6 +468,41 @@ Categorias=new ArrayList<String>();
 								ContribucionD2.getShows().add(Valor2);
 								ContribucionD2.getShows().add(Valor3);
 								}
+								
+								CompleteTextElementType EventoD2=new CompleteTextElementType(NameConstantsMIGS.EVENTO,ContribucionD2,grammarVO);
+								ContribucionD2.getSons().add(EventoD2);
+								
+								ContribucionD2.setClassOfIterator(EventoD);
+								
+								Evento.add(EventoD2);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								EventoD2.getShows().add(VisibleAtt);
+								EventoD2.getShows().add(Valor2);
+								EventoD2.getShows().add(Valor3);
+								}
+								
+								CompleteTextElementType FechaD2=new CompleteTextElementType(NameConstantsMIGS.FECHA,ContribucionD2,grammarVO);
+								ContribucionD2.getSons().add(FechaD2);
+								Fecha.add(EventoD2);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								FechaD2.getShows().add(VisibleAtt);
+								FechaD2.getShows().add(Valor2);
+								FechaD2.getShows().add(Valor3);
+								}
+								
+								
 								}
 							
 							
