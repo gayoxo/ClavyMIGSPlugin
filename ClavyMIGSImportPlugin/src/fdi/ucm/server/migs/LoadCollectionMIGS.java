@@ -284,13 +284,13 @@ ArrayList<String> Categorias=new ArrayList<String>();
 			{
 				while (rs.next()) {
 					
-					String categoria=rs.getObject("categoria").toString();
+					String categoria=rs.getObject("contenido").toString();
 
 					if (categoria!=null&&!categoria.isEmpty())
 						{
 						Categorias.add(categoria);
 						}
-					else System.err.println("ErrorIdovNotFound");
+					else System.err.println("contenido vacio en catalogo");
 				}
 			rs.close();
 			}
@@ -298,10 +298,33 @@ ArrayList<String> Categorias=new ArrayList<String>();
 			e.printStackTrace();
 		}
 		
+		HashMap<String, CompleteTextElementType> tablaCatalogos=new HashMap<String, CompleteTextElementType>();
+		for (String categoria : Categorias) 
+			{
+			CompleteTextElementType Datos=new CompleteTextElementType(categoria,metadatos,grammarVO);
+			metadatos.getSons().add(Datos);
+			{
+			String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+			
+			CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+			
+			Datos.getShows().add(VisibleAtt);
+			Datos.getShows().add(Valor2);
+			Datos.getShows().add(Valor3);
+			
+			}
+			
+			tablaCatalogos.put(categoria, Datos);
+			
+			}
+		
+
+		processCatalogsValues(tablaCatalogos);
 		
 		
-		
-ArrayList<String> Categorias=new ArrayList<String>();
+Categorias=new ArrayList<String>();
 		
 		try {
 			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/classification/taxonpath/source/langstring';");
@@ -309,11 +332,186 @@ ArrayList<String> Categorias=new ArrayList<String>();
 			{
 				while (rs.next()) {
 					
-					String categoria=rs.getObject("categoria").toString();
+					String categoria=rs.getObject("contenido").toString();
 
 					if (categoria!=null&&!categoria.isEmpty())
 						{
 						Categorias.add(categoria);
+						}
+					else System.err.println("contenido vacio en taxonomia");
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		HashMap<String, CompleteTextElementType> tablaTaxon=new HashMap<String, CompleteTextElementType>();
+		for (String categoria : Categorias) 
+			{
+			CompleteTextElementType Datos=new CompleteTextElementType(categoria,metadatos,grammarVO);
+			metadatos.getSons().add(Datos);
+			{
+			String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+			
+			CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+			
+			Datos.getShows().add(VisibleAtt);
+			Datos.getShows().add(Valor2);
+			Datos.getShows().add(Valor3);
+			
+			}
+			
+			tablaTaxon.put(categoria, Datos);
+			
+			}
+		
+		processTaxonValues(tablaTaxon);
+		
+		
+		
+		//TODO AQUI VAN LAS CONTRIBUCIONES
+	}
+
+
+
+	private void processTaxonValues(HashMap<String, CompleteTextElementType> tablaCatalogos) {
+HashMap<Integer,HashMap<Integer, CompleteTextElementType>> tablaDat=new HashMap<Integer,HashMap<Integer, CompleteTextElementType>>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT idov,num_ruta,contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/classification/taxonpath/source/langstring' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht==null)
+								Ht=new HashMap<Integer, CompleteTextElementType>();
+							
+							CompleteTextElementType contenidoDat=tablaCatalogos.get(contenido);
+							Ht.put(DatoR, contenidoDat);
+							
+							tablaDat.put(idovL, Ht);
+							
+							
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("vacio en taxonomia para idov" + idov);
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT idov,num_ruta,contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/classification/taxonpath/taxon/entry/langstring' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht!=null)
+								{
+								CompleteTextElementType futuro=Ht.get(DatoR);
+								if (futuro!=null)
+									{
+									CompleteDocuments CD=ObjetoVirtual.get(idovL);
+									
+									CompleteTextElement CTE=new CompleteTextElement(futuro, contenido);
+									CD.getDescription().add(CTE);
+									}
+								}
+							
+						
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("vacio valor en taxonomia para idov" + idov);
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	private void processCatalogsValues(HashMap<String, CompleteTextElementType> tablaCatalogos) {
+		
+		
+		HashMap<Integer,HashMap<Integer, CompleteTextElementType>> tablaDat=new HashMap<Integer,HashMap<Integer, CompleteTextElementType>>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT idov,num_ruta,contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/general/catalogentry/catalog' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht==null)
+								Ht=new HashMap<Integer, CompleteTextElementType>();
+							
+							CompleteTextElementType contenidoDat=tablaCatalogos.get(contenido);
+							Ht.put(DatoR, contenidoDat);
+							
+							tablaDat.put(idovL, Ht);
+							
+							
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
 						}
 					else System.err.println("ErrorIdovNotFound");
 				}
@@ -322,6 +520,55 @@ ArrayList<String> Categorias=new ArrayList<String>();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT idov,num_ruta,contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/general/catalogentry/entry/langstring' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht!=null)
+								{
+								CompleteTextElementType futuro=Ht.get(DatoR);
+								if (futuro!=null)
+									{
+									CompleteDocuments CD=ObjetoVirtual.get(idovL);
+									
+									CompleteTextElement CTE=new CompleteTextElement(futuro, contenido);
+									CD.getDescription().add(CTE);
+									}
+								}
+							
+						
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("ErrorIdovNotFound");
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 
