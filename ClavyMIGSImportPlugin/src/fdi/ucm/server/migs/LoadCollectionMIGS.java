@@ -249,6 +249,80 @@ public class LoadCollectionMIGS extends LoadCollection{
 		
 		procesaDatos(Datos,GrammarVO);
 		
+		
+		CompleteElementType Metadatos=new CompleteElementType(NameConstantsMIGS.METADATOS,GrammarVO);
+		GrammarVO.getSons().add(Datos);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		Metadatos.getShows().add(VisibleAtt);
+		Metadatos.getShows().add(Valor2);
+		Metadatos.getShows().add(Valor3);
+		
+		String VistaOVMeta=new String(NameConstantsMIGS.META);
+		
+		CompleteOperationalValueType ValorMeta=new CompleteOperationalValueType(NameConstantsMIGS.METADATOS,NameConstantsMIGS.OVType,VistaOVMeta);
+		
+		Metadatos.getShows().add(ValorMeta);
+		}
+		
+		procesaMetaDatos(Metadatos,GrammarVO);
+	}
+
+
+
+	private void procesaMetaDatos(CompleteElementType metadatos, CompleteGrammar grammarVO) {
+ArrayList<String> Categorias=new ArrayList<String>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/general/catalogentry/catalog';");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String categoria=rs.getObject("categoria").toString();
+
+					if (categoria!=null&&!categoria.isEmpty())
+						{
+						Categorias.add(categoria);
+						}
+					else System.err.println("ErrorIdovNotFound");
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+ArrayList<String> Categorias=new ArrayList<String>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT DISTINCT contenido FROM metadatos WHERE ruta='/manifest/metadata/lom/classification/taxonpath/source/langstring';");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String categoria=rs.getObject("categoria").toString();
+
+					if (categoria!=null&&!categoria.isEmpty())
+						{
+						Categorias.add(categoria);
+						}
+					else System.err.println("ErrorIdovNotFound");
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 
