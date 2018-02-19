@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import fdi.ucm.server.modelComplete.ImportExportDataEnum;
 import fdi.ucm.server.modelComplete.ImportExportPair;
@@ -372,7 +373,104 @@ Categorias=new ArrayList<String>();
 		processTaxonValues(tablaTaxon);
 		
 		
+		List<CompleteTextElementType> Contribucion=new ArrayList<CompleteTextElementType>();
 		
+		CompleteTextElementType ContribucionD=new CompleteTextElementType(NameConstantsMIGS.CONTRIBUCION,metadatos,grammarVO);
+		metadatos.getSons().add(ContribucionD);
+		Contribucion.add(ContribucionD);
+		ContribucionD.setMultivalued(true);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		ContribucionD.getShows().add(VisibleAtt);
+		ContribucionD.getShows().add(Valor2);
+		ContribucionD.getShows().add(Valor3);
+		}
+		
+		HashMap<Integer,HashMap<Integer, CompleteTextElementType>> tablaDat=new HashMap<Integer,HashMap<Integer, CompleteTextElementType>>();
+		HashMap<Integer,List<CompleteTextElementType>> tablaDatList=new HashMap<Integer,List<CompleteTextElementType>>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT idov,contenido,num_ruta FROM metadatos WHERE ruta='/manifest/metadata/lom/lifecycle/contribute/centity/vcard' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+							List<CompleteTextElementType> TTT=tablaDatList.get(idovL);
+							if (TTT==null)
+								TTT=new ArrayList<CompleteTextElementType>();
+							
+							while (TTT.size()>=Contribucion.size())
+								{
+								CompleteTextElementType ContribucionD2=new CompleteTextElementType(NameConstantsMIGS.CONTRIBUCION,metadatos,grammarVO);
+								metadatos.getSons().add(ContribucionD2);
+								ContribucionD2.setClassOfIterator(ContribucionD);
+								Contribucion.add(ContribucionD2);
+								ContribucionD2.setMultivalued(true);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								ContribucionD2.getShows().add(VisibleAtt);
+								ContribucionD2.getShows().add(Valor2);
+								ContribucionD2.getShows().add(Valor3);
+								}
+								}
+							
+							
+							CompleteTextElementType este=Contribucion.get(TTT.size());
+							
+							TTT.add(este);
+							tablaDatList.put(idovL, TTT);
+							
+							
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht==null)
+								Ht=new HashMap<Integer, CompleteTextElementType>();
+							
+							Ht.put(DatoR, este);
+							
+							tablaDat.put(idovL, Ht);
+							
+							CompleteDocuments CD=ObjetoVirtual.get(idovL);
+							
+							CompleteTextElement CTE=new CompleteTextElement(este, contenido);
+							CD.getDescription().add(CTE);
+							
+							
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("vacio en contribucion para idov" + idov);
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		//TODO AQUI VAN LAS CONTRIBUCIONES
 	}
 

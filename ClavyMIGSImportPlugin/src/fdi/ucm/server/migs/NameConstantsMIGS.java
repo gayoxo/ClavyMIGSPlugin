@@ -27,6 +27,7 @@ public class NameConstantsMIGS {
 	public static final String VOCNUMBER = "Vocabulary N#";
 	public static final String OVType = "OVType";
 	public static final String UNIDADES = "Unidades";
+	public static final String CONTRIBUCION = "Contribucion de";
 	
 	//	PRESENTACION
 	public static final String PRESNTACION = "Presentacion";
@@ -63,6 +64,7 @@ public class NameConstantsMIGS {
 	
 	public static final String VOCABULARY = "Vocabulary";
 	public static final String TERM = "Term";
+
 
 
 
