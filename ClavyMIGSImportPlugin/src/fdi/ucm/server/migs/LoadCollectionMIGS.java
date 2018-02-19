@@ -252,7 +252,7 @@ public class LoadCollectionMIGS extends LoadCollection{
 		
 		
 		CompleteElementType Metadatos=new CompleteElementType(NameConstantsMIGS.METADATOS,GrammarVO);
-		GrammarVO.getSons().add(Datos);
+		GrammarVO.getSons().add(Metadatos);
 		{
 		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
 		
@@ -391,11 +391,9 @@ Categorias=new ArrayList<String>();
 		ContribucionD.getShows().add(Valor3);
 		}
 		
-		List<CompleteTextElementType> Evento=new ArrayList<CompleteTextElementType>();
-		
+
 		CompleteTextElementType EventoD=new CompleteTextElementType(NameConstantsMIGS.EVENTO,ContribucionD,grammarVO);
 		ContribucionD.getSons().add(EventoD);
-		Evento.add(EventoD);
 		{
 		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
 		
@@ -408,11 +406,9 @@ Categorias=new ArrayList<String>();
 		EventoD.getShows().add(Valor3);
 		}
 		
-		List<CompleteTextElementType> Fecha=new ArrayList<CompleteTextElementType>();
-		
+
 		CompleteTextElementType FechaD=new CompleteTextElementType(NameConstantsMIGS.FECHA,ContribucionD,grammarVO);
 		ContribucionD.getSons().add(FechaD);
-		Fecha.add(EventoD);
 		{
 		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
 		
@@ -470,11 +466,10 @@ Categorias=new ArrayList<String>();
 								}
 								
 								CompleteTextElementType EventoD2=new CompleteTextElementType(NameConstantsMIGS.EVENTO,ContribucionD2,grammarVO);
-								ContribucionD2.getSons().add(EventoD2);
+								EventoD2.getSons().add(EventoD2);
 								
-								ContribucionD2.setClassOfIterator(EventoD);
+								EventoD2.setClassOfIterator(EventoD);
 								
-								Evento.add(EventoD2);
 								{
 								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
 								
@@ -488,8 +483,9 @@ Categorias=new ArrayList<String>();
 								}
 								
 								CompleteTextElementType FechaD2=new CompleteTextElementType(NameConstantsMIGS.FECHA,ContribucionD2,grammarVO);
-								ContribucionD2.getSons().add(FechaD2);
-								Fecha.add(EventoD2);
+								FechaD2.getSons().add(FechaD2);
+								 FechaD2.setClassOfIterator( FechaD);
+								
 								{
 								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
 								
@@ -541,7 +537,115 @@ Categorias=new ArrayList<String>();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//TODO AQUI VAN LAS CONTRIBUCIONES
+		
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT idov,contenido,num_ruta FROM metadatos WHERE ruta='/manifest/metadata/lom/lifecycle/contribute/role/value/langstring' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+						
+							
+							
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht!=null)
+								{
+								CompleteTextElementType este = Ht.get(DatoR);
+								if (este!=null)
+									{
+										for (CompleteElementType completeElementType : este.getSons()) {
+											if (completeElementType instanceof CompleteTextElementType && completeElementType.getName().equals(NameConstantsMIGS.EVENTO))
+												{
+												CompleteDocuments CD=ObjetoVirtual.get(idovL);
+												
+												CompleteTextElement CTE=new CompleteTextElement((CompleteTextElementType) completeElementType, contenido);
+												CD.getDescription().add(CTE);
+												}
+										}
+									}
+								}
+
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("vacio en contribucion evento para idov" + idov);
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT idov,contenido,num_ruta FROM metadatos WHERE ruta='/manifest/metadata/lom/lifecycle/contribute/date/datetime' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String valor=rs.getObject("num_ruta").toString();
+					String contenido=rs.getObject("contenido").toString();
+					
+					
+					if (idov!=null&&!idov.isEmpty()&&valor!=null&&!valor.isEmpty()&&contenido!=null&&!contenido.isEmpty())
+						{
+						try {
+							Integer idovL = Integer.parseInt(idov);
+							Integer DatoR=Integer.parseInt(Character.toString(valor.charAt(8)));
+							
+						
+							
+							
+							
+							HashMap<Integer, CompleteTextElementType> Ht=tablaDat.get(idovL);
+							if (Ht!=null)
+								{
+								CompleteTextElementType este = Ht.get(DatoR);
+								if (este!=null)
+									{
+										for (CompleteElementType completeElementType : este.getSons()) {
+											if (completeElementType instanceof CompleteTextElementType && completeElementType.getName().equals(NameConstantsMIGS.FECHA))
+												{
+												CompleteDocuments CD=ObjetoVirtual.get(idovL);
+												
+												CompleteTextElement CTE=new CompleteTextElement((CompleteTextElementType) completeElementType, contenido);
+												CD.getDescription().add(CTE);
+												}
+										}
+									}
+								}
+
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
+						}
+					else System.err.println("vacio en contribucion fecha para idov" + idov);
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 
