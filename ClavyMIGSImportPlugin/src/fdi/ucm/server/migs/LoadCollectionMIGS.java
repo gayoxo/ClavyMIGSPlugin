@@ -3,6 +3,7 @@
  */
 package fdi.ucm.server.migs;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,10 +17,14 @@ import fdi.ucm.server.modelComplete.LoadCollection;
 import fdi.ucm.server.modelComplete.collection.CompleteCollection;
 import fdi.ucm.server.modelComplete.collection.CompleteCollectionAndLog;
 import fdi.ucm.server.modelComplete.collection.document.CompleteDocuments;
+import fdi.ucm.server.modelComplete.collection.document.CompleteLinkElement;
+import fdi.ucm.server.modelComplete.collection.document.CompleteResourceElementURL;
 import fdi.ucm.server.modelComplete.collection.document.CompleteTextElement;
 import fdi.ucm.server.modelComplete.collection.grammar.CompleteElementType;
 import fdi.ucm.server.modelComplete.collection.grammar.CompleteGrammar;
+import fdi.ucm.server.modelComplete.collection.grammar.CompleteLinkElementType;
 import fdi.ucm.server.modelComplete.collection.grammar.CompleteOperationalValueType;
+import fdi.ucm.server.modelComplete.collection.grammar.CompleteResourceElementType;
 import fdi.ucm.server.modelComplete.collection.grammar.CompleteTextElementType;
 
 /**
@@ -272,6 +277,235 @@ public class LoadCollectionMIGS extends LoadCollection{
 		}
 		
 		procesaMetaDatos(Metadatos,GrammarVO);
+		
+		CompleteElementType Recursos=new CompleteElementType(NameConstantsMIGS.RESOURCE,GrammarVO);
+		GrammarVO.getSons().add(Recursos);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		Recursos.getShows().add(VisibleAtt);
+		Recursos.getShows().add(Valor2);
+		Recursos.getShows().add(Valor3);
+		
+		String VistaOVMeta=new String(NameConstantsMIGS.META);
+		
+		CompleteOperationalValueType ValorMeta=new CompleteOperationalValueType(NameConstantsMIGS.RESOURCE,NameConstantsMIGS.OVType,VistaOVMeta);
+		
+		Recursos.getShows().add(ValorMeta);
+		}
+		
+		procesaRecursos(Recursos,GrammarVO);
+	}
+
+
+
+	private void procesaRecursos(CompleteElementType recursos, CompleteGrammar grammarVO) {
+		
+		
+List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResourceElementType>();
+		
+	CompleteResourceElementType RecursosD=new CompleteResourceElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.URL,recursos,grammarVO);
+		recursos.getSons().add(RecursosD);
+		RecursosFilesList.add(RecursosD);
+		RecursosD.setMultivalued(true);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		RecursosD.getShows().add(VisibleAtt);
+		RecursosD.getShows().add(Valor2);
+		RecursosD.getShows().add(Valor3);
+		}
+		
+		HashMap<Integer,List<CompleteResourceElementType>> tablaDatList=new HashMap<Integer,List<CompleteResourceElementType>>();
+		
+		try {
+			ResultSet rs=MQL.RunQuerrySELECT("SELECT idov,nom_rec,nom_rec_publico,tipoRec,descripcion,tipo FROM recursos WHERE tipo!='OV' ORDER BY idov;");
+			if (rs!=null) 
+			{
+				while (rs.next()) {
+					
+					String idov=rs.getObject("idov").toString();
+					String nom_rec=rs.getObject("nom_rec").toString();
+
+					if (idov!=null&&!idov.isEmpty()&&nom_rec!=null&&!nom_rec.isEmpty())
+						{
+						Integer idovL = Integer.parseInt(idov);
+						List<CompleteResourceElementType> TTT=tablaDatList.get(idovL);	
+						
+						if (TTT==null)
+							TTT=new ArrayList<CompleteResourceElementType>();
+						
+						while (TTT.size()>=RecursosFilesList.size())
+							{
+							CompleteResourceElementType RecursosD2=new CompleteResourceElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.URL,recursos,grammarVO);
+							recursos.getSons().add(RecursosD2);
+							RecursosFilesList.add(RecursosD2);
+							RecursosD2.setMultivalued(true);
+							RecursosD2.setClassOfIterator(RecursosD);
+							{
+							String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+							
+							CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+							
+							RecursosD2.getShows().add(VisibleAtt);
+							RecursosD2.getShows().add(Valor2);
+							RecursosD2.getShows().add(Valor3);
+							}
+
+							}
+						
+						CompleteResourceElementType este=RecursosFilesList.get(TTT.size());
+						
+						TTT.add(este);
+						tablaDatList.put(idovL, TTT);
+						
+						CompleteDocuments CD=ObjetoVirtual.get(idovL);
+						
+						CompleteResourceElementURL CTE=new CompleteResourceElementURL(este, File.separator+idov+File.separator+nom_rec);
+						CD.getDescription().add(CTE);		
+						
+						}
+					else System.err.println("contenido vacio en catalogo");
+				}
+			rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		List<CompleteTextElementType> LinkFilesList=new ArrayList<CompleteTextElementType>();
+		
+		CompleteTextElementType LinkD=new CompleteTextElementType(NameConstantsMIGS.RELACION,recursos,grammarVO);
+			recursos.getSons().add(LinkD);
+			LinkFilesList.add(LinkD);
+			LinkD.setMultivalued(true);
+			{
+			String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+			
+			CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+			
+			LinkD.getShows().add(VisibleAtt);
+			LinkD.getShows().add(Valor2);
+			LinkD.getShows().add(Valor3);
+			}
+			
+			
+			CompleteLinkElementType LinkDLink=new CompleteLinkElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.LINK,LinkD,grammarVO);
+			LinkD.getSons().add(LinkDLink);
+			{
+			String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+			
+			CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+			
+			LinkDLink.getShows().add(VisibleAtt);
+			LinkDLink.getShows().add(Valor2);
+			LinkDLink.getShows().add(Valor3);
+			}
+			
+			HashMap<Integer,List<CompleteTextElementType>> tablaDatList3=new HashMap<Integer,List<CompleteTextElementType>>();
+			
+			try {
+				ResultSet rs=MQL.RunQuerrySELECT("SELECT idov,nom_rec,nom_rec_publico,tipoRec,descripcion,tipo,ruta FROM recursos WHERE tipo='OV' ORDER BY idov;");
+				if (rs!=null) 
+				{
+					while (rs.next()) {
+						
+						String idov=rs.getObject("idov").toString();
+						String tipoRec=rs.getObject("tipoRec").toString();
+						String ruta=rs.getObject("ruta").toString();
+
+						if (idov!=null&&!idov.isEmpty()&&tipoRec!=null&&!tipoRec.isEmpty()&&ruta!=null&&!ruta.isEmpty())
+							{
+							Integer idovL = Integer.parseInt(idov);
+							List<CompleteTextElementType> TTT=tablaDatList3.get(idovL);	
+							
+							if (TTT==null)
+								TTT=new ArrayList<CompleteTextElementType>();
+							
+							while (TTT.size()>=LinkFilesList.size())
+								{
+								CompleteTextElementType LinkD2=new CompleteTextElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.LINK,recursos,grammarVO);
+								recursos.getSons().add(LinkD2);
+								LinkFilesList.add(LinkD2);
+								LinkD2.setMultivalued(true);
+								LinkD2.setClassOfIterator(LinkD);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								LinkD2.getShows().add(VisibleAtt);
+								LinkD2.getShows().add(Valor2);
+								LinkD2.getShows().add(Valor3);
+								}
+								
+								
+								CompleteLinkElementType LinkDLink2=new CompleteLinkElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.LINK,LinkD2,grammarVO);
+								LinkD2.getSons().add(LinkDLink2);
+								LinkDLink2.setClassOfIterator(LinkDLink);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								LinkDLink2.getShows().add(VisibleAtt);
+								LinkDLink2.getShows().add(Valor2);
+								LinkDLink2.getShows().add(Valor3);
+								}
+
+								}
+							
+							CompleteTextElementType este=LinkFilesList.get(TTT.size());
+							
+							TTT.add(este);
+							tablaDatList3.put(idovL, TTT);
+							
+							CompleteDocuments CD=ObjetoVirtual.get(idovL);
+							
+							CompleteTextElement CTE=new CompleteTextElement(este, tipoRec);
+							CD.getDescription().add(CTE);		
+							
+							try {
+								CompleteElementType AA=este.getSons().get(0);
+								if (AA instanceof CompleteLinkElementType)
+								{
+									Integer IntLinkD=Integer.parseInt(ruta.substring(0, ruta.length()-1));
+									CompleteDocuments CDs=ObjetoVirtual.get(IntLinkD);
+								CompleteLinkElement CTEL=new CompleteLinkElement((CompleteLinkElementType)AA, CDs);
+								CD.getDescription().add(CTEL);		
+								}
+							} catch (Exception e) {
+								System.err.println("contenido vacio en Link recurso "+ ruta);
+							}
+							
+							}
+						else System.err.println("contenido vacio en catalogo");
+					}
+				rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
 	}
 
 

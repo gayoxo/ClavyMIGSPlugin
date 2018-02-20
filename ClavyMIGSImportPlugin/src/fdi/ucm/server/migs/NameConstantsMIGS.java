@@ -30,6 +30,9 @@ public class NameConstantsMIGS {
 	public static final String CONTRIBUCION = "Contribucion de";
 	public static final String EVENTO = "Evento";
 	public static final String FECHA = "Fecha";
+	public static final String URL = "URL";
+	public static final String LINK = "LINK";
+	public static final String RELACION = "Relacion";
 	
 	//	PRESENTACION
 	public static final String PRESNTACION = "Presentacion";
@@ -66,8 +69,6 @@ public class NameConstantsMIGS {
 	
 	public static final String VOCABULARY = "Vocabulary";
 	public static final String TERM = "Term";
-	
-
 
 
 
