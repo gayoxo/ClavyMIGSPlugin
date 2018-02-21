@@ -324,6 +324,64 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 		RecursosD.getShows().add(Valor3);
 		}
 		
+		
+		CompleteTextElementType NomRec=new CompleteTextElementType(NameConstantsMIGS.NOM_REC,RecursosD,grammarVO);
+		RecursosD.getSons().add(NomRec);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		NomRec.getShows().add(VisibleAtt);
+		NomRec.getShows().add(Valor2);
+		NomRec.getShows().add(Valor3);
+		}
+		
+		CompleteTextElementType NomRecPub=new CompleteTextElementType(NameConstantsMIGS.NOM_REC_PUBLICO,RecursosD,grammarVO);
+		RecursosD.getSons().add(NomRecPub);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		NomRecPub.getShows().add(VisibleAtt);
+		NomRecPub.getShows().add(Valor2);
+		NomRecPub.getShows().add(Valor3);
+		}
+		
+		CompleteTextElementType TypeRec=new CompleteTextElementType(NameConstantsMIGS.TYPE_REC,RecursosD,grammarVO);
+		RecursosD.getSons().add(TypeRec);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		TypeRec.getShows().add(VisibleAtt);
+		TypeRec.getShows().add(Valor2);
+		TypeRec.getShows().add(Valor3);
+		}
+		
+		CompleteTextElementType DesrecRec=new CompleteTextElementType(NameConstantsMIGS.DESCRIPTION,RecursosD,grammarVO);
+		RecursosD.getSons().add(DesrecRec);
+		{
+		String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+		
+		CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+		CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+		
+		DesrecRec.getShows().add(VisibleAtt);
+		DesrecRec.getShows().add(Valor2);
+		DesrecRec.getShows().add(Valor3);
+		}
+		
+		
 		HashMap<Integer,List<CompleteResourceElementType>> tablaDatList=new HashMap<Integer,List<CompleteResourceElementType>>();
 		
 		try {
@@ -334,6 +392,9 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 					
 					String idov=rs.getObject("idov").toString();
 					String nom_rec=rs.getObject("nom_rec").toString();
+					String nom_rec_publico=rs.getObject("nom_rec_publico").toString();
+					String tipoRec=rs.getObject("tipoRec").toString();
+					String descripcion=rs.getObject("descripcion").toString();
 
 					if (idov!=null&&!idov.isEmpty()&&nom_rec!=null&&!nom_rec.isEmpty())
 						{
@@ -361,6 +422,68 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 							RecursosD2.getShows().add(Valor2);
 							RecursosD2.getShows().add(Valor3);
 							}
+							
+							CompleteTextElementType NomRec2=new CompleteTextElementType(NameConstantsMIGS.NOM_REC,RecursosD2,grammarVO);
+							RecursosD2.getSons().add(NomRec2);
+							NomRec2.setClassOfIterator(NomRec);
+							{
+							String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+							
+							CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+							
+							NomRec2.getShows().add(VisibleAtt);
+							NomRec2.getShows().add(Valor2);
+							NomRec2.getShows().add(Valor3);
+							}
+							
+							CompleteTextElementType NomRecPub2=new CompleteTextElementType(NameConstantsMIGS.NOM_REC_PUBLICO,RecursosD2,grammarVO);
+							RecursosD2.getSons().add(NomRecPub2);
+							NomRecPub2.setClassOfIterator(NomRecPub);
+							{
+							String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+							
+							CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+							
+							NomRecPub2.getShows().add(VisibleAtt);
+							NomRecPub2.getShows().add(Valor2);
+							NomRecPub2.getShows().add(Valor3);
+							}
+							
+							CompleteTextElementType TypeRec2=new CompleteTextElementType(NameConstantsMIGS.TYPE_REC,RecursosD2,grammarVO);
+							RecursosD2.getSons().add(TypeRec2);
+							TypeRec2.setClassOfIterator(TypeRec);
+							{
+							String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+							
+							CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+							
+							TypeRec2.getShows().add(VisibleAtt);
+							TypeRec2.getShows().add(Valor2);
+							TypeRec2.getShows().add(Valor3);
+							}
+							
+							CompleteTextElementType DesrecRec2=new CompleteTextElementType(NameConstantsMIGS.DESCRIPTION,RecursosD2,grammarVO);
+							RecursosD2.getSons().add(DesrecRec2);
+							DesrecRec2.setClassOfIterator(DesrecRec);
+							{
+							String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+							
+							CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+							CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+							
+							DesrecRec2.getShows().add(VisibleAtt);
+							DesrecRec2.getShows().add(Valor2);
+							DesrecRec2.getShows().add(Valor3);
+							}
+							
+							
 
 							}
 						
@@ -373,6 +496,32 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 						
 						CompleteResourceElementURL CTE=new CompleteResourceElementURL(este, File.separator+idov+File.separator+nom_rec);
 						CD.getDescription().add(CTE);		
+						
+						if (este.getSons().get(0) instanceof CompleteTextElementType && este.getSons().get(0).getName().equals(NameConstantsMIGS.NOM_REC))
+						{
+						CompleteTextElement CTE2=new CompleteTextElement((CompleteTextElementType) este.getSons().get(0), nom_rec);
+						CD.getDescription().add(CTE2);	
+						}
+						
+						if (nom_rec_publico!=null&&!nom_rec_publico.isEmpty()&&este.getSons().get(1) instanceof CompleteTextElementType && este.getSons().get(1).getName().equals(NameConstantsMIGS.NOM_REC_PUBLICO))
+						{
+						CompleteTextElement CTE2=new CompleteTextElement((CompleteTextElementType) este.getSons().get(1), nom_rec_publico);
+						CD.getDescription().add(CTE2);	
+						}
+						
+						if (tipoRec!=null&&!tipoRec.isEmpty()&&este.getSons().get(2) instanceof CompleteTextElementType && este.getSons().get(2).getName().equals(NameConstantsMIGS.TYPE_REC))
+						{
+						CompleteTextElement CTE2=new CompleteTextElement((CompleteTextElementType) este.getSons().get(2), nom_rec_publico);
+						CD.getDescription().add(CTE2);	
+						}
+						
+						if (descripcion!=null&&!descripcion.isEmpty()&&este.getSons().get(3) instanceof CompleteTextElementType && este.getSons().get(3).getName().equals(NameConstantsMIGS.DESCRIPTION))
+						{
+						CompleteTextElement CTE2=new CompleteTextElement((CompleteTextElementType) este.getSons().get(3), nom_rec_publico);
+						CD.getDescription().add(CTE2);	
+						}
+						
+						
 						
 						}
 					else System.err.println("contenido vacio en catalogo");
@@ -417,6 +566,20 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 			LinkDLink.getShows().add(Valor3);
 			}
 			
+			CompleteTextElementType NomRecPubL=new CompleteTextElementType(NameConstantsMIGS.NOM_REC_PUBLICO,LinkD,grammarVO);
+			LinkD.getSons().add(NomRecPubL);
+			{
+			String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+			
+			CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+			CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+			
+			NomRecPubL.getShows().add(VisibleAtt);
+			NomRecPubL.getShows().add(Valor2);
+			NomRecPubL.getShows().add(Valor3);
+			}
+			
 			HashMap<Integer,List<CompleteTextElementType>> tablaDatList3=new HashMap<Integer,List<CompleteTextElementType>>();
 			
 			try {
@@ -428,6 +591,7 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 						String idov=rs.getObject("idov").toString();
 						String tipoRec=rs.getObject("tipoRec").toString();
 						String ruta=rs.getObject("ruta").toString();
+						String nom_rec_publico=rs.getObject("nom_rec_publico").toString();
 
 						if (idov!=null&&!idov.isEmpty()&&tipoRec!=null&&!tipoRec.isEmpty()&&ruta!=null&&!ruta.isEmpty())
 							{
@@ -439,7 +603,7 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 							
 							while (TTT.size()>=LinkFilesList.size())
 								{
-								CompleteTextElementType LinkD2=new CompleteTextElementType(NameConstantsMIGS.RESOURCE+" "+NameConstantsMIGS.LINK,recursos,grammarVO);
+								CompleteTextElementType LinkD2=new CompleteTextElementType(NameConstantsMIGS.RELACION,recursos,grammarVO);
 								recursos.getSons().add(LinkD2);
 								LinkFilesList.add(LinkD2);
 								LinkD2.setMultivalued(true);
@@ -472,6 +636,21 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 								LinkDLink2.getShows().add(Valor3);
 								}
 
+								CompleteTextElementType NomRecPubL2=new CompleteTextElementType(NameConstantsMIGS.NOM_REC_PUBLICO,LinkD2,grammarVO);
+								LinkD2.getSons().add(NomRecPubL2);
+								NomRecPubL2.setClassOfIterator(NomRecPubL);
+								{
+								String VistaOV=new String(NameConstantsMIGS.PRESNTACION);
+								
+								CompleteOperationalValueType VisibleAtt = new CompleteOperationalValueType(NameConstantsMIGS.VISIBLESHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor2=new CompleteOperationalValueType(NameConstantsMIGS.BROWSERSHOWN,Boolean.toString(true),VistaOV);
+								CompleteOperationalValueType Valor3=new CompleteOperationalValueType(NameConstantsMIGS.SUMMARYSHOWN,Boolean.toString(false),VistaOV);
+								
+								NomRecPubL2.getShows().add(VisibleAtt);
+								NomRecPubL2.getShows().add(Valor2);
+								NomRecPubL2.getShows().add(Valor3);
+								}
+								
 								}
 							
 							CompleteTextElementType este=LinkFilesList.get(TTT.size());
@@ -496,6 +675,13 @@ List<CompleteResourceElementType> RecursosFilesList=new ArrayList<CompleteResour
 							} catch (Exception e) {
 								System.err.println("contenido vacio en Link recurso "+ ruta);
 							}
+							
+							if (nom_rec_publico!=null&&!nom_rec_publico.isEmpty()&&este.getSons().get(1) instanceof CompleteTextElementType && este.getSons().get(1).getName().equals(NameConstantsMIGS.NOM_REC_PUBLICO))
+							{
+							CompleteTextElement CTE2=new CompleteTextElement((CompleteTextElementType) este.getSons().get(1), nom_rec_publico);
+							CD.getDescription().add(CTE2);	
+							}
+							
 							
 							}
 						else System.err.println("contenido vacio en catalogo");

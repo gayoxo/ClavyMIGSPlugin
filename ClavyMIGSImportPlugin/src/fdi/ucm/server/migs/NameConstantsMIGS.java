@@ -33,6 +33,9 @@ public class NameConstantsMIGS {
 	public static final String URL = "URL";
 	public static final String LINK = "LINK";
 	public static final String RELACION = "Relacion";
+	public static final String NOM_REC="Nombre del Recurso";
+	public static final String NOM_REC_PUBLICO="Nombre del Recurso (publico)";
+	public static final String TYPE_REC = "Tipo de Recurso";
 	
 	//	PRESENTACION
 	public static final String PRESNTACION = "Presentacion";
@@ -69,6 +72,8 @@ public class NameConstantsMIGS {
 	
 	public static final String VOCABULARY = "Vocabulary";
 	public static final String TERM = "Term";
+
+	
 
 
 
